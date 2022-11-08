@@ -18,6 +18,7 @@ TODO:
 
 ShortCut = ""
 Source = ""
+
 def CreateLink():
     os.system('clear')
     #Get the UserName Linux
