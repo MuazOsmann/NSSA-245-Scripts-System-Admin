@@ -29,8 +29,11 @@ def CreateLink():
     #Find if the files exists in the system
     if(os.path.exists(Source)):
         #Create the symbolic link
-        os.symlink(Source, ShortCut)
-        print("The Symbolic Link has been created")
+        try:
+            os.symlink(Source, ShortCut)
+            print("The Symbolic Link has been created")
+        except:
+            print("ERROR: The Symbolic Link could not be created!")
     else:
         print("ERROR: The file does not exist!")
 
@@ -47,12 +50,16 @@ def DeleteLink():
     #Find if the files exists in the system
     if(os.path.exists(ShortCut)):
         #Deletes the symbolic link
-        subprocess.Popen("unlink {}".format(ShortCut), shell=True, stdout=subprocess.PIPE).stdout.read()
-        print("The Symbolic Link has been deleted")
+        try:
+            subprocess.Popen("unlink {}".format(ShortCut), shell=True, stdout=subprocess.PIPE).stdout.read()
+            print("The Symbolic Link has been deleted")
+        except:
+            print("ERROR: The Symbolic Link could not be deleted!")
     else:
         print("ERROR: The file does not exist!")
 
 def SummarizedReport():
+    #Clearing the Terminal
     os.system('clear')
     #Get the UserName Linux
     username = os.path.expanduser("~")
@@ -62,27 +69,27 @@ def SummarizedReport():
     print("The Current Working Directory is:- {}".format(os.getcwd()))
     #The summary report lists the symbolic links in the user’s home directory and prints them in a user-friendly format
     Links = subprocess.Popen("find . -type l", shell=True, stdout=subprocess.PIPE).stdout.read()
-    #Filter the output
+    #Filter the output so it is more User Friendly
     Links = Links.decode("utf-8")
     print("\nThe Symbolic Links in the user’s home directory are:- ")
     print(Links)
     #The summary report shows the number of links in the user’s home directory.
     NumberOfLinks = subprocess.Popen("find . -type l | wc -l", shell=True, stdout=subprocess.PIPE).stdout.read()
-    #Filter the output
+    #Filtering the output so it is more User Friendly
     NumberOfLinks = NumberOfLinks.decode("utf-8")
     print("The number of links in the user’s home directory is: ")
     #Printing the number of links
     print(NumberOfLinks)
     #The summary report shows the target path for each link.
     TargetPath = subprocess.Popen("find . -type l -exec readlink -f {} \;", shell=True, stdout=subprocess.PIPE).stdout.read()
-    #Filter the output
+    #Filtering the output so it is more User Friendly
     TargetPath = TargetPath.decode("utf-8")
     #Printing the output
     print("The target path for each link is: ")
     print(TargetPath)
     os.system('sleep 5')
     
-
+#Clearing the terminal upon execution
 os.system('clear')
 def main():
     LoopTerminator = -1
@@ -95,7 +102,7 @@ def main():
                 print("[3] Summarized Report")
                 print("[quit] Exit\n")
                 #Strip just incase the user enters a space after the number
-                UserInput = str(input("Enter your choice: ")).strip()
+                UserInput = str(input("Enter your choice: ")).strip().lower()
                 if(UserInput == "1"):
                     CreateLink()
                 elif(UserInput == "2"):
@@ -107,7 +114,7 @@ def main():
                     break
                 else:
                     print("Invalid Input! Please Try Again!")
-            except ValueError:
+            except:
                 #Expected Errors in the program
                 print("Invalid Input! Please Try Again!")
                 continue
