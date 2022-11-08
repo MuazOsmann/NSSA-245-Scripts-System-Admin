@@ -21,7 +21,7 @@ Source = ""
 
 def CreateLink():
     os.system('clear')
-    #Get the UserName Linux
+    #Get the UserName Linux.
     username = os.path.expanduser("~")
     #cd to the user's home directory
     os.chdir(username)
