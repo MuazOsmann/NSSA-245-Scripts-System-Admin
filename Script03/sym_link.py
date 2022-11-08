@@ -1,5 +1,4 @@
-import os, subprocess
-
+import os, subprocess, sys
 """
 TODO:
 1 - Create the function that will create a symbolic link, we are expecting User to enter the file that they want to enter a short for
@@ -8,43 +7,108 @@ TODO:
 4 - the function that prints the summarized report of the links in the system
 5 - the report has to be "User Friendly" aka easy to read and understand
 6 - User is informed of their current working directory, i tihink its os.getcwd()
-"""
 #Example of creating a SYMBLOIC LINK: 'ln -s /Users/name/Documents/MyFolder /Users/name/Desktop/MyFolder'
 #Example of Removing a symbolic link: 'unlink <path-to-symlink>'
 #How to find broken links: finding them -> 'find /home/james -xtype l' Deleteing them -> 'find /home/james -xtype l -delete'
-def CreateLink(FileName, Destinantion, Source):
-    pass
+"""
 
-def DeleteLink(Filename,Destination,Source):
-    pass
+ShortCut = ""
+Source = ""
+def CreateLink():
+    os.system('clear')
+    #Get the UserName Linux
+    username = os.path.expanduser("~")
+    #cd to the user's home directory
+    os.chdir(username)
+    #Get the Current Working Directory
+    print("The Current Working Directory is:- {}".format(os.getcwd()))
+    #the user is asked about the file name
+    ShortCut = str(input("Enter the name of the shortcut: "))
+    #the user is asked about the source file name
+    Source = str(input("Enter the name of the source file: "))
+    #Find if the files exists in the system
+    if(os.path.exists(Source)):
+        #Create the symbolic link
+        os.symlink(Source, ShortCut)
+        print("The Symbolic Link has been created")
+    else:
+        print("ERROR: The file does not exist!")
 
-def SummarizedReport(FileName):
-    pass
+def DeleteLink():
+    os.system('clear')
+    #Get the Current Working Directory
+    print("The Current Working Directory is:- {}".format(os.getcwd()))
+    #Get the UserName Linux
+    username = os.path.expanduser("~")
+    #cd to the user's home directory
+    os.chdir(username)
+    #the user is asked about the file name
+    ShortCut = str(input("Enter the name of the shortcut: "))
+    #Find if the files exists in the system
+    if(os.path.exists(ShortCut)):
+        #Deletes the symbolic link
+        subprocess.Popen("unlink {}".format(ShortCut), shell=True, stdout=subprocess.PIPE).stdout.read()
+        print("The Symbolic Link has been deleted")
+    else:
+        print("ERROR: The file does not exist!")
 
+def SummarizedReport():
+    os.system('clear')
+    #Get the UserName Linux
+    username = os.path.expanduser("~")
+    #cd to the user's home directory
+    os.chdir(username)
+    #Get the Current Working Directory
+    print("The Current Working Directory is:- {}".format(os.getcwd()))
+    #The summary report lists the symbolic links in the user’s home directory and prints them in a user-friendly format
+    Links = subprocess.Popen("find . -type l", shell=True, stdout=subprocess.PIPE).stdout.read()
+    #Filter the output
+    Links = Links.decode("utf-8")
+    print("\nThe Symbolic Links in the user’s home directory are:- ")
+    print(Links)
+    #The summary report shows the number of links in the user’s home directory.
+    NumberOfLinks = subprocess.Popen("find . -type l | wc -l", shell=True, stdout=subprocess.PIPE).stdout.read()
+    #Filter the output
+    NumberOfLinks = NumberOfLinks.decode("utf-8")
+    print("The number of links in the user’s home directory is: ")
+    #Printing the number of links
+    print(NumberOfLinks)
+    #The summary report shows the target path for each link.
+    TargetPath = subprocess.Popen("find . -type l -exec readlink -f {} \;", shell=True, stdout=subprocess.PIPE).stdout.read()
+    #Filter the output
+    TargetPath = TargetPath.decode("utf-8")
+    #Printing the output
+    print("The target path for each link is: ")
+    print(TargetPath)
+    os.system('sleep 5')
+    
+
+os.system('clear')
 def main():
     LoopTerminator = -1
     while(LoopTerminator != 0):
         while True:
             try:
-                print("Welcome to the Symbloic Link Script\n")
-                print("[1] Create a Symbloic Link\n")
-                print("[2] Delete a Link\n")
-                print("[3] Symbolic Links Summarized Report\n")
-                print("[quit] To Quit the Program\n")
-                #Taking the input here
-                Decision = str(input("Enter your selection: "))
-            except:
-                #Here is the exceptions to be added that we might face in the program running
-                print("\nInvalid Input! Please Try again!")
-                pass
-            #Decision taking mechanism to call the functions upon selection
-            if(Decision == "1"):
-                CreateLink()
-            if(Decision == "2"):
-                DeleteLink()
-            if(Decision == "3"):
-                SummarizedReport()
-            if(Decision == "quit" or Decision == "Quit"):
-                LoopTerminator = 0
-
+                print("\n********************************************\n***** Welcome To Symolbic Link Manager *****\n********************************************\n")
+                print("[1] Create a Symbolic Link")
+                print("[2] Delete a Symbolic Link")
+                print("[3] Summarized Report")
+                print("[quit] Exit\n")
+                #Strip just incase the user enters a space after the number
+                UserInput = str(input("Enter your choice: ")).strip()
+                if(UserInput == "1"):
+                    CreateLink()
+                elif(UserInput == "2"):
+                    DeleteLink()
+                elif(UserInput == "3"):
+                    SummarizedReport()
+                elif(UserInput == "quit"):
+                    LoopTerminator = 0
+                    break
+                else:
+                    print("Invalid Input! Please Try Again!")
+            except ValueError:
+                #Expected Errors in the program
+                print("Invalid Input! Please Try Again!")
+                continue
 main()
