@@ -1,4 +1,8 @@
-import os, subprocess, sys
+#!/usr/bin/env python3
+#Name: Muaz Osman
+#Date: 11/09/2022
+
+import os, subprocess
 """
 TODO:
 1 - Create the function that will create a symbolic link, we are expecting User to enter the file that they want to enter a short for
