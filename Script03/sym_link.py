@@ -115,6 +115,10 @@ def main():
                 elif(UserInput == "3"):
                     SummarizedReport()
                 elif(UserInput == "quit"):
+                    os.system('clear')
+                    print("\n*****************************************************\n***** Thank You For Using Symolbic Link Manager *****\n*****************************************************\n")
+                    print("Quitting the Program in 3 Seconds...")
+                    os.system('sleep 3')
                     LoopTerminator = 0
                     break
                 else:
