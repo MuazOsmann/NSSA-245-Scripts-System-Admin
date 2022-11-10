@@ -37,23 +37,30 @@ def CreateLink():
     exists in any of the directories within home, if it does then we can create the symbolic link to that file path, if it does not then we can
     inform the user that the file does not exist in the system.
     """
-    for root, dirs, files in os.walk(username):
-        if Source in files:
-            PathToFile = os.path.join(root, Source)
-            #if the function return None then the file does not exist
-            if(PathToFile == None):
-                print("ERROR: The file does not exist!")
+    def FileLookUp():
+        for root, dirs, files in os.walk(username):
+            if Source in files:
+                PathToFile = os.path.join(root, Source)
+    try:
+        PathToFile = FileLookUp()
+        if(PathToFile == None):
+            raise Exception
+    except:
+        print("ERROR: The file does not exist!")
     #the user is asked about the source file name
     #Find if the files exists in the system
-    if(os.path.exists(PathToFile)):
-        #Create the symbolic link
-        try:
-            os.symlink(PathToFile, ShortCut)
-            print("The Symbolic Link has been created")
-        except:
-            print("ERROR: The Symbolic Link could not be created!")
-    else:
-        print("ERROR: The file does not exist!")
+    try:
+        if(os.path.exists(PathToFile)):
+            #Create the symbolic link
+            try:
+                os.symlink(PathToFile, ShortCut)
+                print("The Symbolic Link has been created")
+            except:
+                print("ERROR: The Symbolic Link could not be created!")
+        else:
+            print("ERROR: The file does not exist!")
+    except:
+        pass
 
 def DeleteLink():
     os.system('clear')
@@ -134,7 +141,7 @@ def main():
                     print("Invalid Input! Please Try Again!")
             except:
                 #Expected Errors in the program
-                print("Invalid Input! Please Try Again!")
+                print("An Error Occured!")
                 continue
 
 main()

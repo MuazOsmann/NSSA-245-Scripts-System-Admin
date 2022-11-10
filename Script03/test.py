@@ -7,4 +7,9 @@ def find(name, path):
         if(name == None):
             print("ERROR: The file does not exist!")
 
-print(find('testtasdkasml', '/home/'))
+Result = find('testtasdkasml', '/home/')
+try:
+    if(Result == None):
+        raise Exception
+except:
+    print("ERROR: The file does not exist!")
