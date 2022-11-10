@@ -11,7 +11,7 @@ TODO:
 4 - the function that prints the summarized report of the links in the system
 5 - the report has to be "User Friendly" aka easy to read and understand
 6 - User is informed of their current working directory, i tihink its os.getcwd()
-#Example of creating a SYMBLOIC LINK: 'ln -s /Users/name/Documents/MyFolder /Users/name/Desktop/MyFolder'
+#Example of creating a SYMBOLIC LINK: 'ln -s /Users/name/Documents/MyFolder /Users/name/Desktop/MyFolder'
 #Example of Removing a symbolic link: 'unlink <path-to-symlink>'
 #How to find broken links: finding them -> 'find /home/james -xtype l' Deleteing them -> 'find /home/james -xtype l -delete'
 """
@@ -29,13 +29,26 @@ def CreateLink():
     print("The Current Working Directory is:- {}".format(os.getcwd()))
     #the user is asked about the file name
     ShortCut = str(input("Enter the name of the shortcut: "))
-    #the user is asked about the source file name
     Source = str(input("Enter the name of the source file: "))
+    """
+    TODO:
+    Possible Implementation:
+    is to actually check if the file exists anywhere in the system by looping through the directories of "/home/User" and check if the file
+    exists in any of the directories within home, if it does then we can create the symbolic link to that file path, if it does not then we can
+    inform the user that the file does not exist in the system.
+    """
+    for root, dirs, files in os.walk(username):
+        if Source in files:
+            PathToFile = os.path.join(root, Source)
+            #if the function return None then the file does not exist
+            if(PathToFile == None):
+                print("ERROR: The file does not exist!")
+    #the user is asked about the source file name
     #Find if the files exists in the system
-    if(os.path.exists(Source)):
+    if(os.path.exists(PathToFile)):
         #Create the symbolic link
         try:
-            os.symlink(Source, ShortCut)
+            os.symlink(PathToFile, ShortCut)
             print("The Symbolic Link has been created")
         except:
             print("ERROR: The Symbolic Link could not be created!")
@@ -76,22 +89,18 @@ def SummarizedReport():
     Links = subprocess.Popen("find . -type l", shell=True, stdout=subprocess.PIPE).stdout.read()
     #Filter the output so it is more User Friendly
     Links = Links.decode("utf-8")
-    print("\nThe Symbolic Links in the user’s home directory are:- ")
-    print(Links)
+    print("\nThe Symbolic Links in the user’s home directory are:- \n" + Links)
     #The summary report shows the number of links in the user’s home directory.
     NumberOfLinks = subprocess.Popen("find . -type l | wc -l", shell=True, stdout=subprocess.PIPE).stdout.read()
     #Filtering the output so it is more User Friendly
     NumberOfLinks = NumberOfLinks.decode("utf-8")
-    print("The number of links in the user’s home directory is: ")
-    #Printing the number of links
-    print(NumberOfLinks)
-    #The summary report shows the target path for each link.
+    print("The number of links in the user’s home directory is: \n" + NumberOfLinks)
+    #The summary report shows the target path for each link using the readlink command.
     TargetPath = subprocess.Popen("find . -type l -exec readlink -f {} \;", shell=True, stdout=subprocess.PIPE).stdout.read()
     #Filtering the output so it is more User Friendly
     TargetPath = TargetPath.decode("utf-8")
     #Printing the output
-    print("The target path for each link is: ")
-    print(TargetPath)
+    print("The target path for each link is: \n" + TargetPath)
     os.system('sleep 5')
     
 #Clearing the terminal upon execution

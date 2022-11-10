@@ -3,6 +3,8 @@ import os
 def find(name, path):
     for root, dirs, files in os.walk(path):
         if name in files:
-            return os.path.join(root, name)
+            name = os.path.join(root, name)
+        if(name == None):
+            print("ERROR: The file does not exist!")
 
-print(find('testt.txt', '/home/'))
+print(find('testtasdkasml', '/home/'))
