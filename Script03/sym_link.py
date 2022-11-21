@@ -40,7 +40,7 @@ def CreateLink():
     def FileLookUp():
         for root, dirs, files in os.walk(username):
             if Source in files:
-                PathToFile = os.path.join(root, Source)
+                return os.path.join(root, Source)
     try:
         PathToFile = FileLookUp()
         if(PathToFile == None):
