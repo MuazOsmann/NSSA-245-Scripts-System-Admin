@@ -64,12 +64,12 @@ def CreateLink():
 
 def DeleteLink():
     os.system('clear')
-    #Get the Current Working Directory
-    print("The Current Working Directory is:- {}".format(os.getcwd()))
     #Get the UserName Linux
     username = os.path.expanduser("~")
     #cd to the user's home directory
     os.chdir(username)
+    #Get the Current Working Directory
+    print("The Current Working Directory is:- {}".format(os.getcwd()))
     #the user is asked about the file name
     ShortCut = str(input("Enter the name of the shortcut: "))
     #Find if the files exists in the system
@@ -104,7 +104,7 @@ def SummarizedReport():
     print("The number of links in the user’s home directory is: \n" + NumberOfLinks)
     #The summary report shows the target path for each link using the readlink command.
     TargetPath = subprocess.Popen("find . -type l -exec readlink -f {} \;", shell=True, stdout=subprocess.PIPE).stdout.read()
-    #Filtering the output so it is more User Friendly
+    #Filtering the output so it is more User Friendly 
     TargetPath = TargetPath.decode("utf-8")
     #Printing the output
     print("The target path for each link is: \n" + TargetPath)
@@ -132,7 +132,8 @@ def main():
                     SummarizedReport()
                 elif(UserInput == "quit"):
                     os.system('clear')
-                    print("\n*****************************************************\n***** Thank You For Using Symolbic Link Manager *****\n*****************************************************\n")
+                    # Print "Thank you for using the Symolbic Link Manager" and center it with *
+                    print("\n********************************************\n***** Thank you for using the Symolbic Link Manager *****\n********************************************\n")
                     print("Quitting the Program in 3 Seconds...")
                     os.system('sleep 3')
                     LoopTerminator = 0
@@ -143,5 +144,4 @@ def main():
                 #Expected Errors in the program
                 print("An Error Occured!")
                 continue
-
 main()
