@@ -43,6 +43,11 @@ def CreateLink():
         for root, dirs, files in os.walk(username):
             if Source in files:
                 return os.path.join(root, Source)
+        #Also look for directories
+        for root, dirs, files in os.walk(username):
+            if Source in dirs:
+                return os.path.join(root, Source)
+        return None
     try:
         PathToFile = FileLookUp()
         if(PathToFile == None):
