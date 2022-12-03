@@ -1,9 +1,10 @@
 from geoip import geolite2
 import re
 from datetime import date
+import os
 
 #Clear Terminal Linux
-print(chr(27) + "[2J")
+os.system('clear')
 
 # Define the Variables
 IP_Address = {}
